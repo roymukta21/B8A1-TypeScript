@@ -1,12 +1,12 @@
-# Type Aliases vs Interfaces in TypeScript
+# Type Aliases and Interfaces in TypeScript: Understanding the Difference
 
 ## Introduction
 
-TypeScript offers both type aliases and interfaces for describing the shape of data. They often look similar, but they support different capabilities. Understanding those differences helps keep a project consistent and maintainable.
+When I started learning TypeScript, I noticed that both `type` and `interface` could be used to describe objects. At first, they seemed almost identical. However, after exploring more examples, I found that they have some important differences. Knowing when to use each one can make code easier to organise and maintain.
 
 ## Detailed Explanation
 
-An interface is commonly used to describe the structure of objects and classes. For example:
+An interface is mainly used to define what properties an object should have. It is also useful when creating structures that can be extended by other interfaces.
 
 ```ts
 interface User {
@@ -20,18 +20,20 @@ interface Admin extends User {
 }
 ```
 
-Interfaces support declaration merging. If an interface with the same name is declared more than once in the same scope, TypeScript combines its members. This can be useful when extending types from libraries or adding properties to an existing contract.
+Here, `Admin` gets all the properties from `User` and adds a new `permissions` property. Another interesting feature of interfaces is declaration merging. This means we can declare an interface with the same name again, and TypeScript will combine its properties.
 
-A type alias can describe object shapes too, but it can also represent unions, intersections, primitives, tuples, and function types.
+On the other hand, a type alias gives us more flexibility. It can describe objects, but it can also define unions, tuples, and other combinations of types.
 
 ```ts
 type Status = "pending" | "approved" | "rejected";
+
 type Point = readonly [number, number];
-type Account = User & { isActive: boolean };
+
+type Account = User & {
+  isActive: boolean;
+};
 ```
 
-Unlike interfaces, type aliases cannot be reopened through declaration merging. Both forms can extend or combine object structures: interfaces use `extends`, while aliases commonly use intersection (`&`). Neither is universally better.
+In this example, `Status` represents specific string values, while `Point` defines a tuple. The `Account` type combines two object structures using the intersection operator.
 
-## Conclusion
-
-Choose an interface when defining an object-oriented contract, especially one that may be extended or merged. Choose a type alias for unions, tuples, utility combinations, or other types that are not simply object shapes. For ordinary object models, either is valid; consistency within a codebase matters most.
+Unlike interfaces, type aliases do not support declaration merging. Interfaces commonly use `extends` for
