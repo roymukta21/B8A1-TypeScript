@@ -1,30 +1,26 @@
-type Coordinate = readonly [number, number, string];
 
-function multiplyValue(value: number, multiplier?: number): number {
-  return value * (multiplier === undefined ? 2 : multiplier);
+function multiplyValue(value: number, multiplier: number = 2): number {
+  return value * multiplier;
 }
 
 function processInput(input: string | number | boolean): string | number {
   if (typeof input === "string") {
     return input.trim().toLowerCase();
-  }
-
-  if (typeof input === "number") {
+  } else if (typeof input === "number") {
     return input * 10;
+  } else {
+    return input ? "Active" : "Inactive";
   }
-
-  return input ? "Active" : "Inactive";
 }
 
 function formatCoordinate(
   coordinate: readonly [number, number, string]
 ): string {
-  const [latitude, longitude, locationName] = coordinate;
-  return `Location: ${locationName} (${latitude}, ${longitude})`;
+  return `Location: ${coordinate[2]} (${coordinate[0]}, ${coordinate[1]})`;
 }
 
 function concatenateArrays<T>(...arrays: T[][]): T[] {
-  return arrays.reduce<T[]>((combined, current) => combined.concat(current), []);
+  return arrays.flat();
 }
 
 interface Course {
@@ -33,14 +29,21 @@ interface Course {
   isPublished: boolean;
 }
 
-function getPopularCourses(courses: Course[], minStudents: number): Course[] {
+function getPopularCourses(
+  courses: Course[],
+  minStudents: number
+): Course[] {
   return courses.filter(
-    (course) => course.isPublished && course.students >= minStudents
+    (course: Course) =>
+      course.isPublished && course.students >= minStudents
   );
 }
 
-function pluckValues<T, K extends keyof T>(items: T[], key: K): T[K][] {
-  return items.map((item) => item[key]);
+function pluckValues<T, K extends keyof T>(
+  items: T[],
+  key: K
+): T[K][] {
+  return items.map((item: T) => item[key]);
 }
 
 class Employee {
@@ -70,16 +73,15 @@ class Manager extends Employee {
   }
 }
 
-function validateAgeAsync(age: number): Promise<string> {
+async function validateAgeAsync(age: number): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     if (age < 18) {
       reject(new Error("Access Denied: Must be 18 or older"));
-      return;
+    } else {
+      setTimeout(() => {
+        resolve("Access Granted");
+      }, 1000);
     }
-
-    setTimeout(() => {
-      resolve("Access Granted");
-    }, 1000);
   });
 }
 
@@ -93,9 +95,9 @@ interface Product {
   price: number;
 }
 
-function updateProductPrice(product: Product, newPrice: number): Product {
-  return {
-    ...product,
-    price: newPrice
-  };
+function updateProductPrice(
+  product: Product,
+  newPrice: number
+): Product {
+  return { ...product, price: newPrice };
 }
